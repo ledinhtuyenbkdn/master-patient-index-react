@@ -1,26 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Route, Switch} from 'react-router-dom';
+import HomePage from "./containers/HomePage";
+import LoginPage from "./containers/LoginPage";
+import HealthCenterPage from "./containers/HealthCenterPage";
+import PersonPage from "./containers/PersonPage";
+import MasterPersonPage from "./containers/MasterPersonPage";
+import MasterPersonDetailPage from "./containers/MasterPersonDetailPage";
+import ReviewLinkPage from "./containers/ReviewLinkPage";
+import LogoutPage from "./containers/LogoutPage";
+import {connect} from 'react-redux';
+import * as loginAction from './actions/LoginAction';
+import {bindActionCreators} from "redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App(props) {
+    props.action.loadAccessTokenFromCookies();
+
+    return (
+        <Switch>
+            <Route path='/' component={HomePage} exact/>
+            <Route path='/login' component={LoginPage} exact/>
+            <Route path='/logout' component={LogoutPage} exact/>
+            <Route path='/persons' component={PersonPage} exact/>
+            <Route path='/master-persons' component={MasterPersonPage} exact/>
+            <Route path='/master-persons/:id' component={MasterPersonDetailPage}/>
+            <Route path='/health-centers' component={HealthCenterPage} exact/>
+            <Route path='/review-links' component={ReviewLinkPage} exact/>
+        </Switch>
+    );
 }
 
-export default App;
+function mapDispatchToProps(dispatch) {
+    return {
+        action: bindActionCreators(loginAction, dispatch)
+    }
+}
+
+export default connect(null, mapDispatchToProps)(App);

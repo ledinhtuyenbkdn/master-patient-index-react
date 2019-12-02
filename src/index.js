@@ -3,8 +3,26 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {createStore, applyMiddleware} from "redux";
+import {Provider} from 'react-redux';
+import rootReducer from './reducers/RootReducer';
+import {BrowserRouter} from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import 'typeface-roboto';
+import thunk from "redux-thunk";
+import {ToastContainer} from "react-toastify";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const store = createStore(rootReducer, applyMiddleware(thunk));
+const app = (
+    <Provider store={store}>
+        <BrowserRouter>
+            <App/>
+            <ToastContainer/>
+        </BrowserRouter>
+    </Provider>
+)
+
+ReactDOM.render(app, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
