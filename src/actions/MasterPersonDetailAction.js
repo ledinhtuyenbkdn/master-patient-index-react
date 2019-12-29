@@ -1,17 +1,14 @@
 import * as actionTypes from '../constants/ActionTypes';
 import axios from '../libs/InstanceAxios';
 import {toast} from "react-toastify";
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
-const accessToken = cookies.get('accessToken');
 
 export function getMasterPersonDetail(id) {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch({
             type: actionTypes.GET_MASTER_PERSON_DETAIL.LOADING
         });
 
+        const accessToken = getState().loginReducer.accessToken;
         axios.get('/master-persons/' + id, {headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + accessToken}})
             .then(response => {
                 dispatch({

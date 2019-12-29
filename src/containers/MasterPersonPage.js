@@ -6,17 +6,23 @@ import Layout from "../components/Layout";
 import Grid from "@material-ui/core/Grid";
 import {Typography} from "@material-ui/core";
 import MaterialTable from "material-table";
-import reactSwal from "../libs/SweetAlert";
 import {
-    AddBox, ArrowUpward,
-    Check, ChevronLeft,
+    AddBox,
+    ArrowUpward,
+    Check,
+    ChevronLeft,
     ChevronRight,
     Clear,
     DeleteOutline,
     Edit,
     FilterList,
-    FirstPage, LastPage, Remove,
-    SaveAlt, Search, ViewColumn, InsertLinkOutlined
+    FirstPage,
+    InsertLinkOutlined,
+    LastPage,
+    Remove,
+    SaveAlt,
+    Search,
+    ViewColumn
 } from "@material-ui/icons";
 
 const tableIcons = {
@@ -77,10 +83,12 @@ class MasterPersonPage extends React.Component {
                             ]}
                             columns={[
                                 {title: 'Id', field: 'id', type: 'numeric', editable: 'never'},
+                                {title: 'Global Id', field: 'globalId'},
                                 {title: 'Họ và tên', field: 'fullName'},
                                 {title: 'Số thẻ BHYT', field: 'healthInsuranceNumber'},
                                 {title: 'Số CMND', field: 'identificationNumber'},
                                 {title: 'Địa chỉ', field: 'address'},
+                                {title: 'Tỉnh khai sinh', field: 'province.name'},
                                 {title: 'Ngày sinh', field: 'dateOfBirth', type: 'date'},
                                 {title: 'Giới tính', field: 'gender',
                                     lookup: {

@@ -2,61 +2,69 @@ import * as actionTypes from '../constants/ActionTypes';
 import axios from '../libs/InstanceAxios';
 import {toast} from "react-toastify";
 
-export function getAllPersons() {
+export function getAllUsers() {
     return async (dispatch, getState) => {
         dispatch({
-            type: actionTypes.GET_ALL_PERSONS.LOADING
+            type: actionTypes.GET_ALL_USERS.LOADING
         });
 
         try {
             const accessToken = getState().loginReducer.accessToken;
-            const persons = await axios.get('/persons', {
+            const users = await axios.get('/users', {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'bearer ' + accessToken
                 }
             });
 
-            const provinces = await axios.get('/provinces', {
+            const healthCenters = await axios.get('/health-centers', {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'bearer ' + accessToken
                 }
             });
 
+            const roles = [
+                {
+                    'id': 1,
+                    'roleName': 'ROLE_ADMIN'
+                },
+                {
+                    'id': 2,
+                    'roleName': 'ROLE_USER'
+                }
+            ];
+
             dispatch({
-                type: actionTypes.GET_ALL_PERSONS.SUCCESS,
-                persons: persons.data,
-                provinces: provinces.data
+                type: actionTypes.GET_ALL_USERS.SUCCESS,
+                users: users.data,
+                healthCenters: healthCenters.data,
+                roles
             });
-        } catch (e) {
-            dispatch({
-                type: actionTypes.GET_ALL_PERSONS.FAIL,
-                e
-            });
-            toast('Lỗi không thể tải dữ liệu');
+        } catch (error) {
+
         }
     }
 }
 
-export function createPerson(data) {
+export function createUser(data) {
     return (dispatch, getState) => {
         dispatch({
-            type: actionTypes.CREATE_PERSON.LOADING
+            type: actionTypes.CREATE_USER.LOADING
         });
 
         const accessToken = getState().loginReducer.accessToken;
-        axios.post('/persons', data, {headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + accessToken}})
+        axios.post('/users', data, {headers: {'Content-Type': 'application/json', 'Authorization': 'bearer ' + accessToken}})
             .then(response => {
                 dispatch({
-                    type: actionTypes.CREATE_PERSON.SUCCESS,
-                    person: response.data
+                    type: actionTypes.CREATE_USER.SUCCESS,
+                    user: response.data
                 });
                 toast('Tạo mới thành công');
             })
             .catch(error => {
                 dispatch({
-                    type: actionTypes.CREATE_PERSON.FAIL
+                    type: actionTypes.CREATE_USER.FAIL
                 });
                 toast('Có lỗi đã xảy ra');
             })

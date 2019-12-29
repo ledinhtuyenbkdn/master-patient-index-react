@@ -2,6 +2,7 @@ import * as actionTypes from '../constants/ActionTypes';
 
 const initialState = {
     persons: [],
+    provinces: [],
     loading: false,
     error: null
 };
@@ -15,12 +16,14 @@ export default function personReducer(state = initialState, action) {
         case actionTypes.GET_ALL_PERSONS.SUCCESS:
             return {
                 persons: action.persons,
+                provinces: action.provinces,
                 loading: false,
                 error: null
             };
         case actionTypes.GET_ALL_PERSONS.FAIL:
             return {
                 persons: [],
+                provinces: [],
                 loading: false,
                 error: action.error
             };

@@ -12,6 +12,9 @@ import LogoutPage from "./containers/LogoutPage";
 import {connect} from 'react-redux';
 import * as loginAction from './actions/LoginAction';
 import {bindActionCreators} from "redux";
+import SettingPage from "./containers/SettingPage";
+import UserPage from "./containers/UserPage";
+import DashboardPage from "./containers/DashboardPage";
 
 function App(props) {
     props.action.loadAccessTokenFromCookies();
@@ -21,6 +24,9 @@ function App(props) {
             <Route path='/' component={HomePage} exact/>
             <Route path='/login' component={LoginPage} exact/>
             <Route path='/logout' component={LogoutPage} exact/>
+            <Route path='/dashboard' component={DashboardPage} exact/>
+            <Route path='/settings' component={SettingPage} exact/>
+            <Route path='/users' component={UserPage} exact/>
             <Route path='/persons' component={PersonPage} exact/>
             <Route path='/master-persons' component={MasterPersonPage} exact/>
             <Route path='/master-persons/:id' component={MasterPersonDetailPage}/>

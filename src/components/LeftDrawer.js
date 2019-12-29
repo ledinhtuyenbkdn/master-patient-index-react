@@ -7,13 +7,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InfoIcon from '@material-ui/icons/Info';
-import GitHubIcon from '@material-ui/icons/GitHub';
 import PersonIcon from '@material-ui/icons/Person';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import DomainIcon from '@material-ui/icons/Domain';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import {Link} from "react-router-dom";
 const drawerWidth = 240;
 
@@ -66,6 +66,8 @@ export default function LeftDrawer({authentication}) {
 
     const isAuthenticated = authentication !== null && authentication.userName !== null;
 
+    const isAdmin = isAuthenticated && authentication.roles.includes('ROLE_ADMIN');
+
     return (
         <Drawer
             className={classes.drawer}
@@ -81,13 +83,18 @@ export default function LeftDrawer({authentication}) {
                 <ListItemLink to="/persons" primary="Bệnh nhân" icon={<PersonIcon />} />
                 <ListItemLink to="/master-persons" primary="Định danh" icon={<AssignmentIndIcon />} />
                 <ListItemLink to="/review-links" primary="Duyệt thủ công" icon={<BorderColorIcon />} />
+            </List>}
+            <Divider/>
+            {isAdmin &&
+            <List>
                 <ListItemLink to="/health-centers" primary="Cơ sở y tế" icon={<DomainIcon />} />
-                <ListItemLink to="/setting" primary="Cài đặt" icon={<SettingsIcon />} />
+                <ListItemLink to="/users" primary="Quản lý người dùng" icon={<SupervisedUserCircleIcon />} />
+                <ListItemLink to="/settings" primary="Cài đặt" icon={<SettingsIcon />} />
+
             </List>}
             <Divider/>
             <List>
                 <ListItemLink to="/" primary="Giới thiệu sản phẩm" icon={<InfoIcon />} />
-                <ListItemLink to="/source-code" primary="Mã nguồn" icon={<GitHubIcon />} />
             </List>
         </Drawer>
     );

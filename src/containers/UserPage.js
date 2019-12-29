@@ -1,29 +1,23 @@
 import React, {forwardRef} from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import * as masterPersonDetailAction from '../actions/MasterPersonDetailAction';
+import * as userAction from '../actions/UserAction';
 import Layout from "../components/Layout";
 import Grid from "@material-ui/core/Grid";
 import {Typography} from "@material-ui/core";
 import MaterialTable from "material-table";
+import reactSwal from "../libs/SweetAlert";
 import {
-    AddBox,
-    ArrowUpward,
-    Check,
-    ChevronLeft,
+    AddBox, ArrowUpward,
+    Check, ChevronLeft,
     ChevronRight,
     Clear,
     DeleteOutline,
     Edit,
     FilterList,
-    FirstPage,
-    LastPage,
-    Remove,
-    SaveAlt,
-    Search,
-    ViewColumn
+    FirstPage, LastPage, Remove,
+    SaveAlt, Search, ViewColumn, Visibility, InsertLinkOutlined
 } from "@material-ui/icons";
-import MasterPersonDetails from "../components/MasterPersonDetails";
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -45,22 +39,24 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>)
 };
 
-class MasterPersonDetailPage extends React.Component {
+class UserPage extends React.Component {
 
     componentDidMount() {
-        const masterPersonId = this.props.match.params.id;
-        this.props.action.getMasterPersonDetail(masterPersonId);
+        this.props.action.getAllUsers();
     }
 
     render() {
-        let rows = JSON.parse(JSON.stringify(this.props.masterPersonDetail.people));
-        const masterPerson = JSON.parse(JSON.stringify(this.props.masterPersonDetail));
-        masterPerson.dateOfBirth = this.props.masterPersonDetail.dateOfBirth[2] + '.' + this.props.masterPersonDetail.dateOfBirth[1] + '.' + this.props.masterPersonDetail.dateOfBirth[0];
-        rows.forEach(row => {
-            const dateOfBirth = row.dateOfBirth;
-            if (dateOfBirth !== undefined && dateOfBirth !== null) {
-                row.dateOfBirth = dateOfBirth[2] + '.' + dateOfBirth[1] + '.' + dateOfBirth[0];
-            }
+        let rows = this.props.users;
+        const {healthCenters, roles} = this.props;
+
+        const healthCenterMap = {};
+        healthCenters.forEach(healthCenter => {
+            healthCenterMap[healthCenter.id] = healthCenter.name;
+        });
+
+        const roleMap = {};
+        roles.forEach(role => {
+            roleMap[role.id] = role.roleName;
         });
 
         return (
@@ -68,31 +64,26 @@ class MasterPersonDetailPage extends React.Component {
                 <Grid container justify='center'>
                     <Grid item xs={12}>
                         <Typography variant='h4' align='center' gutterBottom>
-                            Xem chi tiết bệnh nhân liên kết
+                            Quản lý người dùng
                         </Typography>
-                        <Grid item xs={6}>
-                            <MasterPersonDetails masterPerson={this.props.masterPersonDetail}/>
-                        </Grid>
-                        <Grid item xs={6}></Grid>
                         <MaterialTable
                             icons={tableIcons}
-                            title="Master Person Detail"
+                            title="Users"
                             isLoading={this.props.loading}
+                            editable={{
+                                onRowAdd: newData =>
+                                    new Promise(((resolve, reject) => {
+                                        this.props.action.createUser(newData);
+                                        resolve();
+                                    }))
+                            }}
                             columns={[
                                 {title: 'Id', field: 'id', type: 'numeric', editable: 'never'},
-                                {title: 'Mã bệnh nhân', field: 'patientCode'},
-                                {title: 'CSYT', field: 'healthCenter.name'},
                                 {title: 'Họ và tên', field: 'fullName'},
-                                {title: 'Số thẻ BHYT', field: 'healthInsuranceNumber'},
-                                {title: 'Số CMND', field: 'identificationNumber'},
-                                {title: 'Địa chỉ', field: 'address'},
-                                {title: 'Ngày sinh', field: 'dateOfBirth', type: 'date'},
-                                {title: 'Giới tính', field: 'gender',
-                                    lookup: {
-                                        'FEMALE': 'Nữ', 'MALE': 'Nam'
-                                    }},
-                                {title: 'Trạng thái', field: 'personStatus', editable: 'never'},
-                                {title: 'Điểm', field: 'score', editable: 'never'}
+                                {title: 'Tên đăng nhập', field: 'userName'},
+                                {title: 'Mật khẩu', field: 'password'},
+                                {title: 'Cơ sở y tế', field: 'healthCenter.id', lookup: healthCenterMap},
+                                {title: 'Vai trò', field: 'role.id', lookup: roleMap}
                             ]}
                             data={rows}
                         />
@@ -105,7 +96,7 @@ class MasterPersonDetailPage extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        ...state.masterPersonDetailReducer,
+        ...state.userReducer,
         authentication: {
             accessToken: state.loginReducer.accessToken,
             userName: state.loginReducer.userName,
@@ -116,8 +107,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        action: bindActionCreators(masterPersonDetailAction, dispatch)
+        action: bindActionCreators(userAction, dispatch)
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MasterPersonDetailPage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

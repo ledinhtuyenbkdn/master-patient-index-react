@@ -4,6 +4,9 @@ import personReducer from "./PersonReducer";
 import masterPersonReducer from "./MasterPersonReducer";
 import masterPersonDetailReducer from "./MasterPersonDetailReducer";
 import reviewLinkReducer from "./ReviewLinkReducer";
+import settingReducer from "./SettingReducer";
+import userReducer from "./UserReducer";
+import dashboardReducer from "./DashboardReducer";
 import {combineReducers} from "redux";
 
 const rootReducer = combineReducers({
@@ -12,6 +15,9 @@ const rootReducer = combineReducers({
     personReducer,
     masterPersonReducer,
     masterPersonDetailReducer,
-    reviewLinkReducer
+    reviewLinkReducer,
+    settingReducer,
+    userReducer,
+    dashboardReducer
 });
 export default rootReducer;

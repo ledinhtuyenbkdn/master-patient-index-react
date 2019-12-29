@@ -55,6 +55,13 @@ class PersonPage extends React.Component {
             }
         });
 
+        const {provinces} = this.props;
+
+        const provinceMap = {};
+        provinces.forEach(province => {
+            provinceMap[province.id] = province.name;
+        });
+
         return (
             <Layout authentication={this.props.authentication}>
                 <Grid container justify='center'>
@@ -75,28 +82,6 @@ class PersonPage extends React.Component {
                             }}
                             actions={[
                                 {
-                                    icon: Visibility,
-                                    tooltip: 'Xem chi tiết',
-                                    onClick: (event, rowData) => {
-                                        reactSwal.fire({
-                                            icon: 'info',
-                                            title: 'Thông tin chi tiết',
-                                            html: <div>
-                                                <Typography variant='body1' align='left' gutterBottom>Mã bệnh nhân: {rowData.patientCode}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Họ và tên: {rowData.fullName}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Số thẻ BHYT: {rowData.healthInsuranceNumber}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Số CMND: {rowData.identificationNumber}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Địa chỉ: {rowData.address}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Ngày sinh: {rowData.dateOfBirth}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Giới tính: {rowData.gender}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Trạng thái: {rowData.personStatus}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Điểm: {rowData.score}</Typography>
-                                                <Typography variant='body1' align='left' gutterBottom>Cơ sở y tế: {rowData.healthCenter !== null ? rowData.healthCenter.name : ''}</Typography>
-                                            </div>
-                                        })
-                                    }
-                                },
-                                {
                                     icon: InsertLinkOutlined,
                                     tooltip: 'Xem bệnh nhân liên kết',
                                     onClick: (event, rowData) => {
@@ -112,6 +97,7 @@ class PersonPage extends React.Component {
                                 {title: 'Số thẻ BHYT', field: 'healthInsuranceNumber'},
                                 {title: 'Số CMND', field: 'identificationNumber'},
                                 {title: 'Địa chỉ', field: 'address'},
+                                {title: 'Tỉnh khai sinh', field: 'province.id', lookup: provinceMap},
                                 {title: 'Ngày sinh', field: 'dateOfBirth', type: 'date'},
                                 {title: 'Giới tính', field: 'gender',
                                     lookup: {

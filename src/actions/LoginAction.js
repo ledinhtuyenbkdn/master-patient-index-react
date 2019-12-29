@@ -43,7 +43,6 @@ export function loadAccessTokenFromCookies() {
     return dispatch => {
         const cookies = new Cookies();
         const accessToken = cookies.get('accessToken');
-
         if (accessToken !== undefined && accessToken !== null && accessToken !== '') {
             dispatch({
                 type: actionTypes.LOGIN.SUCCESS,

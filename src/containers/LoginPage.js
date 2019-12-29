@@ -39,7 +39,7 @@ class LoginPage extends React.Component {
     render() {
         const {accessToken} = this.props;
         if (accessToken != null) {
-            return <Redirect to='/'/>
+            return <Redirect to='/dashboard'/>
         }
         return (
             <Layout authentication={this.props.authentication}>

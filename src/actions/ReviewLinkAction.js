@@ -1,17 +1,14 @@
 import * as actionTypes from '../constants/ActionTypes';
 import axios from '../libs/InstanceAxios';
 import {toast} from "react-toastify";
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
-const accessToken = cookies.get('accessToken');
 
 export function getAllReviewLinks() {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch({
             type: actionTypes.GET_ALL_REVIEW_LINKS.LOADING
         });
 
+        const accessToken = getState().loginReducer.accessToken;
         axios.get('/review-links', {
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +33,8 @@ export function getAllReviewLinks() {
 }
 
 export function approveReviewLink(id) {
-    return dispatch => {
+    return (dispatch, getState) => {
+        const accessToken = getState().loginReducer.accessToken;
         axios.post('/review-links/' + id + '/match', null, {
             headers: {
                 'Content-Type': 'application/json',
@@ -58,7 +56,8 @@ export function approveReviewLink(id) {
 }
 
 export function rejectReviewLink(id) {
-    return dispatch => {
+    return (dispatch, getState) => {
+        const accessToken = getState().loginReducer.accessToken;
         axios.post('/review-links/' + id + '/reject', null, {
             headers: {
                 'Content-Type': 'application/json',

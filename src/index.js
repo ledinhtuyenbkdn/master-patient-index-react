@@ -9,6 +9,7 @@ import rootReducer from './reducers/RootReducer';
 import {BrowserRouter} from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import 'typeface-roboto';
+import "react-vis/dist/style.css";
 import thunk from "redux-thunk";
 import {ToastContainer} from "react-toastify";
 
